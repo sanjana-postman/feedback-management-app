@@ -1,0 +1,1067 @@
+{
+	"info": {
+		"_postman_id": "47653690-2f69879d-1cd8-41b6-b85f-52ecf69d8728",
+		"name": "Customer Feedback Management API",
+		"description": "# Customer Feedback Management API\n\n## Overview\nThe Customer Feedback Management API enables organizations to collect, manage, and analyze customer feedback efficiently. It provides endpoints for submitting feedback, retrieving and updating feedback entries, posting management responses, and generating analytics summaries. This API is ideal for businesses seeking to improve customer satisfaction by acting on feedback in a structured way.\n\n## Usage Instructions\n1. **Authentication:** (Add details here if authentication is required.)\n2. **Base URL:** Use the mock server or production endpoint as appropriate.\n3. **Endpoints:**\n   - Submit feedback from customers.\n   - Retrieve all or specific feedback entries.\n   - Update feedback status or content.\n   - Post management responses to feedback.\n   - Get analytics summaries for actionable insights.\n\n## Request/Response Structure\n- All endpoints accept and return JSON unless otherwise specified.\n- Standard HTTP status codes are used for responses.\n\n## Additional Notes\n- Ensure required fields are provided in requests.\n- Use the analytics endpoint to monitor trends and satisfaction metrics.\n\nFor detailed usage, see each endpoint's documentation below.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Submit Feedback",
+			"event": [
+				{
+					"id": "893c11f2-f4a5-425e-8d13-cb828cf4f3df",
+					"listen": "test",
+					"script": {
+						"id": "5b51bb16-248e-4646-81dd-041b004b3a21",
+						"exec": [
+							"// Tests for Submit Feedback",
+							"pm.test(\"Status code is 201 (Created)\", function () {",
+							"    pm.expect(pm.response.code).to.eql(201);",
+							"});",
+							"",
+							"pm.test(\"Response has expected fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"message\");",
+							"    pm.expect(jsonData).to.have.property(\"created_at\");",
+							"});",
+							"",
+							"pm.test(\"Response schema is valid\", function () {",
+							"    var schema = {",
+							"        \"type\": \"object\",",
+							"        \"required\": [\"id\", \"message\", \"created_at\"],",
+							"        \"properties\": {",
+							"            \"id\": { \"type\": \"string\" },",
+							"            \"message\": { \"type\": \"string\" },",
+							"            \"created_at\": { \"type\": \"string\" }",
+							"        }",
+							"    };",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-bc2508e4-c8b2-419d-9a87-c3d019bf348d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customer_name\": \"Sanj\",\n  \"customer_email\": \"Sanj@example.com\",\n  \"property_id\": \"RWS\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was small.\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/feedback",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback"
+					]
+				},
+				"description": "Submit new customer feedback.\n\n**Usage:**\n- Use this endpoint to allow customers to submit their feedback.\n- Typically called from a feedback form in your application.\n\n**Request Structure:**\n- Method: POST\n- Body: JSON with fields such as `customerName`, `email`, `rating`, `comments` (field names may vary).\n\n**Response Structure:**\n- Returns the created feedback entry with a unique ID and timestamp.\n- Status: 201 Created on success."
+			},
+			"response": [
+				{
+					"id": "47653690-618af34a-ec1a-4e8c-84d7-455d172ac63f",
+					"name": "Success - Feedback Submitted",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"id\": \"fbk_001\",\n  \"message\": \"Feedback submitted successfully.\",\n  \"created_at\": \"2024-06-01T12:34:56Z\"\n}"
+				},
+				{
+					"id": "47653690-a1204f27-d053-4e8d-8707-7342d821a41c",
+					"name": "Error - Invalid Feedback Submission",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_name\": \"John Doe\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"error\": \"Missing required field: customer_email\"\n}"
+				}
+			]
+		},
+		{
+			"name": "List Feedback",
+			"event": [
+				{
+					"id": "b2df1981-437f-4b58-a02d-d52cbb784154",
+					"listen": "test",
+					"script": {
+						"id": "1227300a-8032-426b-8e8c-26c7d05d4994",
+						"exec": [
+							"// Tests for List Feedback",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Each feedback item has expected fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.feedback && jsonData.feedback.length > 0) {",
+							"        jsonData.feedback.forEach(function(item) {",
+							"            pm.expect(item).to.have.property(\"id\");",
+							"            pm.expect(item).to.have.property(\"message\");",
+							"            pm.expect(item).to.have.property(\"created_at\");",
+							"        });",
+							"    }",
+							"});",
+							"",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-f4f808b7-c856-48a1-8392-4698157c5775",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/feedback",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback"
+					]
+				},
+				"description": "Retrieve a list of all submitted feedback entries.\n\n**Usage:**\n- Use this endpoint to display all feedback for review or analysis.\n- Supports pagination and filtering (if implemented).\n\n**Request Structure:**\n- Method: GET\n- Query parameters may include filters such as `status`, `dateRange`, or pagination controls.\n\n**Response Structure:**\n- Returns an array of feedback objects, each with details like ID, customer info, rating, comments, and timestamps.\n- Status: 200 OK on success."
+			},
+			"response": [
+				{
+					"id": "47653690-fd016082-689d-4269-b14f-e6e0a7e18723",
+					"name": "Success - List Feedback",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback?property_id=hotel_123&category=Service&status=open&limit=20&offset=0",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback"
+							],
+							"query": [
+								{
+									"key": "property_id",
+									"value": "hotel_123",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Service",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "open",
+									"type": "text"
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "[\n  {\n    \"id\": \"fbk_001\",\n    \"customer_name\": \"John Doe\",\n    \"customer_email\": \"john.doe@example.com\",\n    \"property_id\": \"hotel_123\",\n    \"rating\": 4,\n    \"category\": \"Service\",\n    \"comments\": \"Great service but room was noisy.\",\n    \"created_at\": \"2024-06-01T12:34:56Z\",\n    \"status\": \"open\"\n  },\n  {\n    \"id\": \"fbk_002\",\n    \"customer_name\": \"Jane Smith\",\n    \"customer_email\": \"jane.smith@example.com\",\n    \"property_id\": \"hotel_456\",\n    \"rating\": 5,\n    \"category\": \"Cleanliness\",\n    \"comments\": \"Spotless rooms and friendly staff!\",\n    \"created_at\": \"2024-06-02T09:20:00Z\",\n    \"status\": \"open\"\n  }\n]"
+				},
+				{
+					"id": "47653690-bd7a9099-a5c3-4733-bb04-68bd95cfe166",
+					"name": "Error - Invalid Query Parameters",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback?property_id=hotel_123&category=Service&status=open&limit=-1&offset=0",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback"
+							],
+							"query": [
+								{
+									"key": "property_id",
+									"value": "hotel_123",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Service",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "open",
+									"type": "text"
+								},
+								{
+									"key": "limit",
+									"value": "-1",
+									"type": "text"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"error\": \"Invalid value for 'limit'. Must be a positive integer.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Feedback by ID",
+			"event": [
+				{
+					"id": "6fd84340-a10b-4336-81dd-09b8025f3fd0",
+					"listen": "test",
+					"script": {
+						"id": "3b6c5a86-fc6b-40eb-86a3-47967525f53e",
+						"exec": [
+							"// Tests for Get Feedback by ID",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Response has expected fields\", function () {",
+							"    var jsonData = pm.response.json().some();",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"message\");",
+							"    pm.expect(jsonData).to.have.property(\"created_at\");",
+							"});",
+							"",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 404 Not Found\", function () {",
+							"    if (pm.response.code === 404) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-a8dae582-9b41-46b5-96e8-d2a1e521e923",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/feedback/{{id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback",
+						"{{id}}"
+					]
+				},
+				"description": "Retrieve a specific feedback entry by its unique ID.\n\n**Usage:**\n- Use this endpoint to view details of a single feedback submission.\n- Typically used when a user selects a feedback item from a list.\n\n**Request Structure:**\n- Method: GET\n- Path parameter: `id` (the unique identifier of the feedback entry).\n\n**Response Structure:**\n- Returns the feedback object with all details (customer info, rating, comments, timestamps).\n- Status: 200 OK on success; 404 Not Found if the ID does not exist."
+			},
+			"response": [
+				{
+					"id": "47653690-7d410bcf-7ac9-491c-971d-e550db555db9",
+					"name": "Success - Get Feedback by ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_001",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_001"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_001"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"id\": \"fbk_001\",\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\",\n  \"created_at\": \"2024-06-01T12:34:56Z\",\n  \"status\": \"open\"\n}"
+				},
+				{
+					"id": "47653690-ba4b64e2-3caf-443c-8c97-c4b155259be4",
+					"name": "Error - Feedback Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_999",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_999"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_999"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"error\": \"Feedback entry not found for ID: fbk_999\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Feedback",
+			"event": [
+				{
+					"id": "435b702f-e995-46f0-9165-cadf79ef0148",
+					"listen": "test",
+					"script": {
+						"id": "3471bd0b-7d3e-47ae-bccb-d21b8184c982",
+						"exec": [
+							"// Tests for Update Feedback",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 404 Not Found\", function () {",
+							"    if (pm.response.code === 404) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-728fc131-1d5b-4140-b74c-3499cdb305e8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"category\": \"Service\",\n  \"status\": \"open\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/feedback/{{id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback",
+						"{{id}}"
+					]
+				},
+				"description": "Update an existing feedback entry by its unique ID.\n\n**Usage:**\n- Use this endpoint to modify feedback details or update its status (e.g., mark as reviewed or resolved).\n- Typically used by administrators or support staff.\n\n**Request Structure:**\n- Method: PUT or PATCH\n- Path parameter: `id` (the unique identifier of the feedback entry).\n- Body: JSON with fields to update (e.g., `status`, `managementNotes`).\n\n**Response Structure:**\n- Returns the updated feedback object.\n- Status: 200 OK on success; 404 Not Found if the ID does not exist."
+			},
+			"response": [
+				{
+					"id": "47653690-998b60bf-6b43-4969-a252-c33c9a243d0b",
+					"name": "Success - Update Feedback",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"resolved\",\n  \"managementNotes\": \"Issue acknowledged and resolved.\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_001",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_001"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_001"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"id\": \"fbk_001\",\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\",\n  \"created_at\": \"2024-06-01T12:34:56Z\",\n  \"status\": \"resolved\",\n  \"managementNotes\": \"Issue acknowledged and resolved.\"\n}"
+				},
+				{
+					"id": "47653690-1f5eb4df-4509-4871-aa44-28a0b4900ef6",
+					"name": "Error - Feedback Not Found",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"resolved\",\n  \"managementNotes\": \"Issue acknowledged and resolved.\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_999",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_999"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_999"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"error\": \"Feedback entry not found for ID: fbk_999\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Post Management Response",
+			"event": [
+				{
+					"id": "e75a4de8-632f-4d94-b6b6-4013ccf8e61b",
+					"listen": "test",
+					"script": {
+						"id": "edfad675-e048-4549-b358-e766ace853c4",
+						"exec": [
+							"// Tests for Post Management Response",
+							"pm.test(\"Status code is 201 (Created)\", function () {",
+							"    pm.expect(pm.response.code).to.eql(201);",
+							"});",
+							"",
+							"",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 404 Not Found\", function () {",
+							"    if (pm.response.code === 404) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-d8cb5fd0-fca5-488a-a280-6eeee5b34ea9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"response\": \"Thank you for your feedback. We will address the noise issue promptly.\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/feedback/{{id}}/response",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback",
+						"{{id}}",
+						"response"
+					]
+				},
+				"description": "Post a management response to a specific feedback entry.\n\n**Usage:**\n- Use this endpoint to add a response from management to a feedback item, visible to the customer.\n- Typically used after reviewing feedback to acknowledge or address customer concerns.\n\n**Request Structure:**\n- Method: POST\n- Path parameter: `id` (the unique identifier of the feedback entry).\n- Body: JSON with fields such as `responseMessage`, `responderName`.\n\n**Response Structure:**\n- Returns the updated feedback object with the management response attached.\n- Status: 200 OK on success; 404 Not Found if the ID does not exist."
+			},
+			"response": [
+				{
+					"id": "47653690-8260d5bd-fdf6-4a25-888c-48ebd59ed3bf",
+					"name": "Success - Post Management Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responseMessage\": \"Thank you for your feedback. We are addressing the noise issue.\",\n  \"responderName\": \"Manager Jane\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_001/response",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_001",
+								"response"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_001"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"id\": \"fbk_001\",\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\",\n  \"created_at\": \"2024-06-01T12:34:56Z\",\n  \"status\": \"open\",\n  \"managementResponse\": {\n    \"responseMessage\": \"Thank you for your feedback. We are addressing the noise issue.\",\n    \"responderName\": \"Manager Jane\"\n  }\n}"
+				},
+				{
+					"id": "47653690-a293f8d1-442b-43f6-8154-38621b02b3a6",
+					"name": "Error - Feedback Not Found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responseMessage\": \"Thank you for your feedback. We are addressing the noise issue.\",\n  \"responderName\": \"Manager Jane\"\n}",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "https://api.example.com/feedback/fbk_999/response",
+							"protocol": "https",
+							"host": [
+								"api",
+								"example",
+								"com"
+							],
+							"path": [
+								"feedback",
+								"fbk_999",
+								"response"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fbk_999"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"error\": \"Feedback entry not found for ID: fbk_999\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Analytics Summary",
+			"event": [
+				{
+					"id": "5201a98e-0b66-47f1-a594-24d177841566",
+					"listen": "test",
+					"script": {
+						"id": "8f9cc1b1-e88a-4707-973d-f986411611b3",
+						"exec": [
+							"// Tests for Analytics Summary",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"",
+							"// Unsuccessful response tests",
+							"pm.test(\"Handles 400 Bad Request\", function () {",
+							"    if (pm.response.code === 400) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Handles 500 Internal Server Error\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData).to.have.property(\"error\");",
+							"        pm.expect(jsonData.error).to.be.a(\"string\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-8a1651f8-138e-4a39-94dc-c115ff8a0af7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/analytics/summary",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"analytics",
+						"summary"
+					]
+				},
+				"description": "Retrieve an analytics summary of customer feedback.\n\n**Usage:**\n- Use this endpoint to get aggregated insights, such as average ratings, feedback trends, and common topics.\n- Typically used by management to monitor customer satisfaction and identify areas for improvement.\n\n**Request Structure:**\n- Method: GET\n- May support query parameters for date range or filters.\n\n**Response Structure:**\n- Returns a summary object with analytics data (e.g., counts, averages, trend graphs).\n- Status: 200 OK on success."
+			},
+			"response": []
+		}
+	]
+}
