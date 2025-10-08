@@ -1062,6 +1062,410 @@
 				"description": "Retrieve an analytics summary of customer feedback.\n\n**Usage:**\n- Use this endpoint to get aggregated insights, such as average ratings, feedback trends, and common topics.\n- Typically used by management to monitor customer satisfaction and identify areas for improvement.\n\n**Request Structure:**\n- Method: GET\n- May support query parameters for date range or filters.\n\n**Response Structure:**\n- Returns a summary object with analytics data (e.g., counts, averages, trend graphs).\n- Status: 200 OK on success."
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Feedback",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1fb2de50-11d1-4b1a-8500-88632065e6a0",
+						"exec": [
+							"// Edge case: Feedback does not exist (404)",
+							"pm.test(\"Feedback does not exist\", function () {",
+							"    if (pm.response.code === 404) {",
+							"        pm.expect(pm.response.json().error).to.eql(\"Feedback with the given ID does not exist.\");",
+							"    }",
+							"});",
+							"",
+							"// Edge case: Feedback already deleted (404 or custom message)",
+							"pm.test(\"Feedback already deleted\", function () {",
+							"    if (pm.response.code === 404) {",
+							"        pm.expect(pm.response.json().error).to.include(\"does not exist\");",
+							"    }",
+							"});",
+							"",
+							"// Edge case: Unauthorized user (401)",
+							"pm.test(\"Unauthorized user\", function () {",
+							"    if (pm.response.code === 401) {",
+							"        pm.expect(pm.response.json().error).to.eql(\"Unauthorized\");",
+							"    }",
+							"});",
+							"",
+							"// Edge case: Unverified or unauthorized user (403)",
+							"pm.test(\"Unverified or unauthorized user\", function () {",
+							"    if (pm.response.code === 403) {",
+							"        pm.expect(pm.response.json().error).to.eql(\"Forbidden\");",
+							"    }",
+							"});",
+							"",
+							"// Success case: Feedback deleted (200)",
+							"pm.test(\"Feedback deleted successfully\", function () {",
+							"    if (pm.response.code === 200) {",
+							"        pm.expect(pm.response.json().message).to.eql(\"Feedback deleted successfully\");",
+							"        pm.expect(pm.response.json()).to.have.property(\"feedback_id\");",
+							"    }",
+							"});",
+							"",
+							"// Edge case: Unexpected error (500)",
+							"pm.test(\"Unexpected error occurred\", function () {",
+							"    if (pm.response.code === 500) {",
+							"        pm.expect(pm.response.json().error).to.eql(\"Unexpected error occurred.\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "47653690-1d9b50a3-d0e2-4919-8b80-42edfcf2abd8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/feedback/:feedback_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"feedback",
+						":feedback_id"
+					],
+					"variable": [
+						{
+							"key": "feedback_id",
+							"value": ""
+						}
+					]
+				},
+				"description": "Generated from cURL: curl --location --request DELETE '{{baseUrl}}/api/v1/feedback/:feedback_id' \\\n--header 'Authorization: Bearer <token>' \\\n--header 'Content-Type: application/json'"
+			},
+			"response": [
+				{
+					"id": "47653690-c164f661-859e-4560-95cb-41cfe1429ca4",
+					"name": "200 OK - Feedback deleted successfully",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"message\":\"Feedback deleted successfully\",\"feedback_id\":\"12345\"}"
+				},
+				{
+					"id": "47653690-03ae0d01-4832-4aa8-b410-c01b589380c0",
+					"name": "404 Not Found - Feedback does not exist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/99999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"99999"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "99999"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Feedback with the given ID does not exist.\"}"
+				},
+				{
+					"id": "47653690-49b7ebed-4c40-4717-becd-a5780538f154",
+					"name": "401 Unauthorized - Unauthenticated user",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Unauthorized\"}"
+				},
+				{
+					"id": "47653690-365358da-fb05-4cd9-8bfc-96529cc203cb",
+					"name": "403 Forbidden - Unverified or unauthorized user",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Forbidden\"}"
+				},
+				{
+					"id": "47653690-b7d58943-84ee-4616-9e67-a049f14f9c2f",
+					"name": "500 Internal Server Error - Unexpected error",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Unexpected error occurred.\"}"
+				}
+			]
 		}
 	]
 }
