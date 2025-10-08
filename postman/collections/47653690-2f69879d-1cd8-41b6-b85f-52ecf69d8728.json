@@ -1280,6 +1280,126 @@
 					"cookie": [],
 					"responseTime": null,
 					"body": "{\"error\":\"Unauthorized\"}"
+				},
+				{
+					"id": "47653690-365358da-fb05-4cd9-8bfc-96529cc203cb",
+					"name": "403 Forbidden - Unverified or unauthorized user",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Forbidden\"}"
+				},
+				{
+					"id": "47653690-b7d58943-84ee-4616-9e67-a049f14f9c2f",
+					"name": "500 Internal Server Error - Unexpected error",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Unexpected error occurred.\"}"
 				}
 			]
 		}
