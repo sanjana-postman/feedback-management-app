@@ -1062,6 +1062,45 @@
 				"description": "Retrieve an analytics summary of customer feedback.\n\n**Usage:**\n- Use this endpoint to get aggregated insights, such as average ratings, feedback trends, and common topics.\n- Typically used by management to monitor customer satisfaction and identify areas for improvement.\n\n**Request Structure:**\n- Method: GET\n- May support query parameters for date range or filters.\n\n**Response Structure:**\n- Returns a summary object with analytics data (e.g., counts, averages, trend graphs).\n- Status: 200 OK on success."
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Feedback",
+			"id": "47653690-1d9b50a3-d0e2-4919-8b80-42edfcf2abd8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/feedback/:feedback_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"feedback",
+						":feedback_id"
+					],
+					"variable": [
+						{
+							"key": "feedback_id"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl --location --request DELETE '{{baseUrl}}/api/v1/feedback/:feedback_id' \\\n--header 'Authorization: Bearer <token>' \\\n--header 'Content-Type: application/json'"
+			},
+			"response": []
 		}
 	]
 }
