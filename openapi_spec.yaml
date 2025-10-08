@@ -1,0 +1,489 @@
+openapi: 3.0.3
+info:
+  title: Customer Feedback Management API
+  description: RESTful API for hospitality businesses to collect, manage, analyze, and respond to customer feedback.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+    description: Production server
+security:
+  - oauth2: []
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth/authorize
+          tokenUrl: https://auth.example.com/oauth/token
+          scopes: {}
+  schemas:
+    Feedback:
+      type: object
+      properties:
+        feedback_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customer_name:
+          type: string
+          example: "John Doe"
+        customer_email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        property_id:
+          type: string
+          example: "hotel_123"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        category:
+          type: string
+          example: "Service"
+        comments:
+          type: string
+          example: "Great service but room was noisy."
+        sentiment_score:
+          type: number
+          format: float
+          example: 0.75
+        status:
+          type: string
+          example: "open"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-06-02T15:30:00Z"
+      required:
+        - customer_name
+        - customer_email
+        - property_id
+        - rating
+        - comments
+    FeedbackInput:
+      type: object
+      properties:
+        customer_name:
+          type: string
+          example: "John Doe"
+        customer_email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        property_id:
+          type: string
+          example: "hotel_123"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        category:
+          type: string
+          example: "Service"
+        comments:
+          type: string
+          example: "Great service but room was noisy."
+      required:
+        - customer_name
+        - customer_email
+        - property_id
+        - rating
+        - comments
+    FeedbackUpdate:
+      type: object
+      properties:
+        category:
+          type: string
+          example: "Cleanliness"
+        status:
+          type: string
+          example: "closed"
+      required: []
+    ManagementResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          example: "Thank you for your feedback. We will address the noise issue promptly."
+      required:
+        - response
+    AnalyticsSummary:
+      type: object
+      properties:
+        total_feedback:
+          type: integer
+          example: 150
+        average_rating:
+          type: number
+          format: float
+          example: 4.2
+        category_counts:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            Service: 50
+            Cleanliness: 40
+            Amenities: 60
+        sentiment_average:
+          type: number
+          format: float
+          example: 0.65
+paths:
+  /feedback:
+    post:
+      summary: Submit new feedback
+      security:
+        - oauth2: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackInput'
+            examples:
+              success:
+                value:
+                  customer_name: "John Doe"
+                  customer_email: "john.doe@example.com"
+                  property_id: "hotel_123"
+                  rating: 4
+                  category: "Service"
+                  comments: "Great service but room was noisy."
+              validation_error:
+                value:
+                  customer_name: ""
+                  customer_email: "invalid-email"
+                  property_id: ""
+                  rating: 6
+                  comments: ""
+      responses:
+        '201':
+          description: Feedback submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+              examples:
+                success:
+                  value:
+                    feedback_id: "123e4567-e89b-12d3-a456-426614174000"
+                    customer_name: "John Doe"
+                    customer_email: "john.doe@example.com"
+                    property_id: "hotel_123"
+                    rating: 4
+                    category: "Service"
+                    comments: "Great service but room was noisy."
+                    sentiment_score: 0.75
+                    status: "open"
+                    created_at: "2024-06-01T12:00:00Z"
+                    updated_at: "2024-06-01T12:00:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              examples:
+                invalid_input:
+                  value:
+                    error: "Invalid input data"
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
+    get:
+      summary: Retrieve feedback list
+      security:
+        - oauth2: []
+      parameters:
+        - in: query
+          name: property_id
+          schema:
+            type: string
+          description: Filter feedback by property ID
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter feedback by category
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter feedback by status
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+          description: Number of feedback items to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+          description: Offset for pagination
+      responses:
+        '200':
+          description: List of feedback
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedback'
+              examples:
+                success:
+                  value:
+                    - feedback_id: "123e4567-e89b-12d3-a456-426614174000"
+                      customer_name: "John Doe"
+                      customer_email: "john.doe@example.com"
+                      property_id: "hotel_123"
+                      rating: 4
+                      category: "Service"
+                      comments: "Great service but room was noisy."
+                      sentiment_score: 0.75
+                      status: "open"
+                      created_at: "2024-06-01T12:00:00Z"
+                      updated_at: "2024-06-01T12:00:00Z"
+                    - feedback_id: "223e4567-e89b-12d3-a456-426614174001"
+                      customer_name: "Jane Smith"
+                      customer_email: "jane.smith@example.com"
+                      property_id: "hotel_123"
+                      rating: 5
+                      category: "Cleanliness"
+                      comments: "Room was spotless."
+                      sentiment_score: 0.9
+                      status: "closed"
+                      created_at: "2024-05-30T10:00:00Z"
+                      updated_at: "2024-06-01T09:00:00Z"
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
+  /feedback/{id}:
+    get:
+      summary: Retrieve specific feedback by ID
+      security:
+        - oauth2: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Feedback ID
+      responses:
+        '200':
+          description: Feedback details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+              examples:
+                success:
+                  value:
+                    feedback_id: "123e4567-e89b-12d3-a456-426614174000"
+                    customer_name: "John Doe"
+                    customer_email: "john.doe@example.com"
+                    property_id: "hotel_123"
+                    rating: 4
+                    category: "Service"
+                    comments: "Great service but room was noisy."
+                    sentiment_score: 0.75
+                    status: "open"
+                    created_at: "2024-06-01T12:00:00Z"
+                    updated_at: "2024-06-01T12:00:00Z"
+        '404':
+          description: Feedback not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    error: "Feedback not found"
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
+    patch:
+      summary: Update/categorize feedback
+      security:
+        - oauth2: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Feedback ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackUpdate'
+            examples:
+              success:
+                value:
+                  category: "Cleanliness"
+                  status: "closed"
+              validation_error:
+                value:
+                  category: ""
+                  status: "invalid_status"
+      responses:
+        '200':
+          description: Feedback updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+              examples:
+                success:
+                  value:
+                    feedback_id: "123e4567-e89b-12d3-a456-426614174000"
+                    customer_name: "John Doe"
+                    customer_email: "john.doe@example.com"
+                    property_id: "hotel_123"
+                    rating: 4
+                    category: "Cleanliness"
+                    comments: "Great service but room was noisy."
+                    sentiment_score: 0.75
+                    status: "closed"
+                    created_at: "2024-06-01T12:00:00Z"
+                    updated_at: "2024-06-02T15:30:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              examples:
+                invalid_input:
+                  value:
+                    error: "Invalid input data"
+        '404':
+          description: Feedback not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    error: "Feedback not found"
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
+  /feedback/{id}/response:
+    post:
+      summary: Post management response to feedback
+      security:
+        - oauth2: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Feedback ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementResponse'
+            examples:
+              success:
+                value:
+                  response: "Thank you for your feedback. We will address the noise issue promptly."
+              validation_error:
+                value:
+                  response: ""
+      responses:
+        '201':
+          description: Management response posted successfully
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    message: "Response posted successfully"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              examples:
+                invalid_input:
+                  value:
+                    error: "Invalid input data"
+        '404':
+          description: Feedback not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    error: "Feedback not found"
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
+  /analytics/summary:
+    get:
+      summary: Generate summary statistics
+      security:
+        - oauth2: []
+      responses:
+        '200':
+          description: Analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsSummary'
+              examples:
+                success:
+                  value:
+                    total_feedback: 150
+                    average_rating: 4.2
+                    category_counts:
+                      Service: 50
+                      Cleanliness: 40
+                      Amenities: 60
+                    sentiment_average: 0.65
+        '401':
+          description: Unauthorized - Invalid or missing OAuth token
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: "Unauthorized"
