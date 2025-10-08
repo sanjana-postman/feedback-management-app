@@ -1100,7 +1100,188 @@
 				},
 				"description": "Generated from cURL: curl --location --request DELETE '{{baseUrl}}/api/v1/feedback/:feedback_id' \\\n--header 'Authorization: Bearer <token>' \\\n--header 'Content-Type: application/json'"
 			},
-			"response": []
+			"response": [
+				{
+					"id": "47653690-c164f661-859e-4560-95cb-41cfe1429ca4",
+					"name": "200 OK - Feedback deleted successfully",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"message\":\"Feedback deleted successfully\",\"feedback_id\":\"12345\"}"
+				},
+				{
+					"id": "47653690-03ae0d01-4832-4aa8-b410-c01b589380c0",
+					"name": "404 Not Found - Feedback does not exist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/99999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"99999"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "99999"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "Bearer <token>",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Feedback with the given ID does not exist.\"}"
+				},
+				{
+					"id": "47653690-49b7ebed-4c40-4717-becd-a5780538f154",
+					"name": "401 Unauthorized - Unauthenticated user",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": "json"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/feedback/12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feedback",
+								"12345"
+							],
+							"variable": [
+								{
+									"key": "feedback_id",
+									"value": "12345"
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Authorization",
+							"value": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"error\":\"Unauthorized\"}"
+				}
+			]
 		}
 	]
 }
