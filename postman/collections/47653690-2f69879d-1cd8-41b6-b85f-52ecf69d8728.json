@@ -680,7 +680,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"category\": \"Service\",\n  \"status\": \"open\"\n}"
+					"raw": "{\n  \"category\": \"Service\",\n  \"status\": \"resolved\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/feedback/{{id}}",
