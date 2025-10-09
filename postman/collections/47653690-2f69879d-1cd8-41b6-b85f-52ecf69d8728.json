@@ -1068,7 +1068,44 @@
 				},
 				"description": "Retrieve an analytics summary of customer feedback.\n\n**Usage:**\n- Use this endpoint to get aggregated insights, such as average ratings, feedback trends, and common topics.\n- Typically used by management to monitor customer satisfaction and identify areas for improvement.\n\n**Request Structure:**\n- Method: GET\n- May support query parameters for date range or filters.\n\n**Response Structure:**\n- Returns a summary object with analytics data (e.g., counts, averages, trend graphs).\n- Status: 200 OK on success."
 			},
-			"response": []
+			"response": [
+				{
+					"id": "47653690-134ac048-6715-43b6-af4e-33ef8cbdd27f",
+					"name": "Sample Analytics Summary Response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"analytics",
+								"summary"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"enabled": true
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\"average_rating\":4.3,\"total_feedback\":128,\"trend\":[{\"date\":\"2025-10-01\",\"count\":12},{\"date\":\"2025-10-02\",\"count\":15}],\"common_topics\":[\"cleanliness\",\"staff friendliness\",\"food quality\"]}"
+				}
+			]
 		},
 		{
 			"name": "Delete Feedback",
