@@ -109,14 +109,17 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"hotel_123\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was noisy.\"\n}",
 							"options": {
-								"raw": "json"
+								"raw": {
+									"language": "json"
+								}
 							}
 						},
 						"url": {
