@@ -87,7 +87,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"customer_name\": \"Sanj\",\n  \"customer_email\": \"Sanj@example.com\",\n  \"property_id\": \"RWS\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was small.\"\n}"
+					"raw": "{\n  \"customer_name\": \"Sanj\",\n  \"customer_email\": \"john.doe@example.com\",\n  \"property_id\": \"RWS\",\n  \"rating\": 4,\n  \"category\": \"Service\",\n  \"comments\": \"Great service but room was small.\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/feedback",
