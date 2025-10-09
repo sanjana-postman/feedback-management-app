@@ -703,14 +703,17 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"status\": \"resolved\",\n  \"managementNotes\": \"Issue acknowledged and resolved.\"\n}",
 							"options": {
-								"raw": "json"
+								"raw": {
+									"language": "json"
+								}
 							}
 						},
 						"url": {
