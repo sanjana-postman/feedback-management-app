@@ -1,0 +1,10 @@
+{
+  "info": {
+    "name": "Customer Feedback Management API",
+    "description": "RESTful API for hospitality businesses to collect, manage, analyze, and respond to customer feedback.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    // ... (collection requests and folders, including Analytics Summary with the new example)
+  ]
+}
